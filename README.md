@@ -1,6 +1,6 @@
 # odom_array_msgs
 
-A small, standalone ROS 1 (catkin) message package. It provides a single
+A small, standalone ROS 2 (ament) message package. It provides a single
 message type, `OdometryArray`, for carrying several `nav_msgs/Odometry`
 estimates together in one timestamped message.
 
@@ -22,32 +22,32 @@ a separate topic for each one.
 
 ## Dependencies
 
-`std_msgs`, `nav_msgs`, and the catkin message tooling (`message_generation` at
-build time, `message_runtime` at run time).
+`std_msgs`, `nav_msgs`, and the ROS 2 interface tooling (`rosidl_default_generators`
+at build time, `rosidl_default_runtime` at run time).
 
 ## Build
 
-Place the package inside a catkin workspace `src` folder and build it:
+Place the package inside a colcon workspace `src` folder and build it:
 
 ```
-catkin build odom_array_msgs
+colcon build --packages-select odom_array_msgs
 ```
 
 Once the workspace is sourced, the message is available as
-`odom_array_msgs/OdometryArray` from both C++ and Python.
+`odom_array_msgs/msg/OdometryArray` from both C++ and Python.
 
 ## Usage
 
 C++:
 
 ```cpp
-#include <odom_array_msgs/OdometryArray.h>
+#include <odom_array_msgs/msg/odometry_array.hpp>
 
-odom_array_msgs::OdometryArray msg;
-msg.header.stamp = ros::Time::now();
+odom_array_msgs::msg::OdometryArray msg;
+msg.header.stamp = node->now();
 msg.header.frame_id = "map";
 
-nav_msgs::Odometry odom;
+nav_msgs::msg::Odometry odom;
 // populate odom.pose and odom.twist
 msg.odometries.push_back(odom);
 ```
@@ -55,12 +55,11 @@ msg.odometries.push_back(odom);
 Python:
 
 ```python
-import rospy
 from odom_array_msgs.msg import OdometryArray
 from nav_msgs.msg import Odometry
 
 msg = OdometryArray()
-msg.header.stamp = rospy.Time.now()
+msg.header.stamp = node.get_clock().now().to_msg()
 msg.header.frame_id = "map"
 msg.odometries.append(Odometry())
 ```

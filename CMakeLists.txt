@@ -1,23 +1,12 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.16)
 project(odom_array_msgs)
 
-find_package(catkin REQUIRED COMPONENTS
-  message_generation
-  std_msgs
-  nav_msgs
-)
+find_package(ament_cmake REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
 
-add_message_files(
-  FILES
-  OdometryArray.msg
-)
+rosidl_generate_interfaces(${PROJECT_NAME} "msg/OdometryArray.msg" DEPENDENCIES std_msgs nav_msgs)
 
-generate_messages(
-  DEPENDENCIES
-  std_msgs
-  nav_msgs
-)
-
-catkin_package(
-  CATKIN_DEPENDS message_runtime std_msgs nav_msgs
-)
+ament_export_dependencies(rosidl_default_runtime)
+ament_package()
